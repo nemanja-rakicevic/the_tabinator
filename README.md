@@ -5,22 +5,38 @@ __...but never had the time to go through them, and felt sad to close them?__
 
 Cheer up, the answer you've been looking for is in front of you!
 <br>
+<br>
 These scripts allow you to delegate this task to the future you, as many times as you'd like.
 <br>
 You can save your open tabs to a .json file, and inspect, edit or restore them later. 
 <br>
 You can even share them with your friends and family!
 
-### Try it
+## Try it:
+
+__step 1)__ Prerequisites:
+<br>
+`sudo apt-get install wmctrl xvkbd xclip xdotool`
+
+__step 2)__ Download repo:
+<br>
+`git clone https://github.com/nemanja-rakicevic/the_tabinator.git; cd the_tabinator`
+
+__step 3)__ Set alies (optional):
+```
+echo -en "\n\nalias tabsave='python $PWD/tabs_manage.py'" >> ~/.bashrc;
+echo -en "\nalias tabload='python $PWD/tabs_manage.py -load $PWD/backup.json'" >> ~/.bashrc;
+echo -en "\nalias tabinate='python $PWD/tabs_focus.py'\n" >> ~/.bashrc
 
 ```
-git clone https://github.com/nemanja-rakicevic/the_tabinator.git
 
-python tabs_manage.py
+__step 4)__ Run!
+<br>
+`tabsave`
 
-```
+<br>
 
-### Description
+## Description
 
 Scripts for manipulating the open browser tabs:
 
