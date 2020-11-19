@@ -63,7 +63,7 @@ def prune_tabs(browser_name, remove_list, **kwargs):
         # Focus on first tab
         xvkbd_command(window_id, '\C1')
         tab_id = 0
-        while True:
+        while True and tab_id < 200:
             xvkbd_command(window_id, '\Cl')
             xvkbd_command(window_id, '\Cc')
             url = os.popen('xclip -out -selection clipboard').read()

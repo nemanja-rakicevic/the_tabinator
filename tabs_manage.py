@@ -83,7 +83,7 @@ def save_tabs(save_path, browser_name, remove_list, group_tabs, **kwargs):
         tab_id = 0
         tabs_list = []
         # while True:
-        while True and tab_id < 10 and cnt_d < 100:
+        while True and tab_id < 200 and cnt_d < 100:
             xvkbd_command(window_id, '\Cl')
             xvkbd_command(window_id, '\Cc')
             url = os.popen('xclip -out -selection clipboard').read()
