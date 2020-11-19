@@ -13,7 +13,12 @@ You can even share them with your friends and family!
 
 ### Try it
 
-`python tabs_manage.py`
+```
+
+git clone https://github.com/nemanja-rakicevic/the_tabinator.git
+python tabs_manage.py
+
+```
 
 ### Description
 
