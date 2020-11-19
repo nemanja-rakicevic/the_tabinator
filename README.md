@@ -25,7 +25,7 @@ __step 2)__ Download repo:
 __step 3)__ Set alies (optional):
 ```
 echo -en "\n\nalias tabsave='python $PWD/tabs_manage.py'" >> ~/.bashrc;
-echo -en "\nalias tabload='python $PWD/tabs_manage.py -load $PWD/backup.json'" >> ~/.bashrc;
+echo -en "\nalias tabload='python $PWD/tabs_manage.py -load $PWD/backup_tabs.json'" >> ~/.bashrc;
 echo -en "\nalias tabinate='python $PWD/tabs_focus.py'\n" >> ~/.bashrc
 
 ```
@@ -70,7 +70,7 @@ Feel free to add these aliases to your `.bashrc`
 
 ```
 echo -en "\n\nalias tabsave='python $PWD/tabs_manage.py'" >> ~/.bashrc;
-echo -en "\nalias tabload='python $PWD/tabs_manage.py -load $PWD/backup.json'" >> ~/.bashrc;
+echo -en "\nalias tabload='python $PWD/tabs_manage.py -load $PWD/backup_tabs.json'" >> ~/.bashrc;
 echo -en "\nalias tabinate='python $PWD/tabs_focus.py'\n" >> ~/.bashrc
 
 ```
