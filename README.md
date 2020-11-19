@@ -14,8 +14,8 @@ You can even share them with your friends and family!
 ### Try it
 
 ```
-
 git clone https://github.com/nemanja-rakicevic/the_tabinator.git
+
 python tabs_manage.py
 
 ```
