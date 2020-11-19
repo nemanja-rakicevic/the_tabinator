@@ -11,6 +11,10 @@ You can save your open tabs to a .json file, and inspect, edit or restore them l
 <br>
 You can even share them with your friends and family!
 
+### Try it
+
+`python tabs_manage.py`
+
 ### Description
 
 Scripts for manipulating the open browser tabs:
@@ -27,13 +31,32 @@ It is possible to pass additional arguments:
 <br>
 -r, --remove_list: does not save tabs with domains from this list, in order to prune useless websites.
 
+NOTE: The script assumes there can be maximum two duplicate tabs in a row,
+If more than three tabs repeat, it assumes that it has circled back to the starting tab,
+so it stops for that window.
+
 
 __tabs_focus.py__:
 <br>
-Traverses all the open tabs and prunes the ones from remove_list (no saving).
+Traverses all the open tabs and prunes the ones from remove_list.
+The goal is to remove unnecessary tabs, without saving, to reduce procrastination.
 
-NOTE: The script assumes there can be maximum two duplicate tabs in a row,
-If more than three tabs repeat, it assumes that it has circled back to the starting tab, so it stops.
+
+### Alias
+
+Feel free to add these aliases to your `.bashrc` 
+(you have to be in the repo directory):
+
+```
+echo -en "\n\nalias tabsave='python $PWD/tabs_manage.py'" >> ~/.bashrc;
+echo -en "\nalias tabload='python $PWD/tabs_manage.py -load $PWD/backup.json'" >> ~/.bashrc;
+echo -en "\nalias tabinate='python $PWD/tabs_focus.py'\n" >> ~/.bashrc
+
+```
+Now you can use one-line aliases: __tabsave__, __tabload__ and __tabinate__
+<br>
+Don't forget to run `source ~/.bashrc`
+
 
 ### Prerequisites
 
@@ -44,8 +67,11 @@ Following window managing packages need to be installed:
 `sudo apt-get install wmctrl xvkbd xclip xdotool`
 
 wmctrl version (1.07-7build1);
+<br>
 xvkbd version (3.9-1);
+<br>
 xclip version (0.12+svn84-4build1);
+<br>
 xdotool version (1:3.20160805.1-3);
 
 
