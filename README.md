@@ -11,6 +11,8 @@ These scripts allow you to delegate this task to the future you, as many times a
 You can save your open tabs to a .json file, and inspect, edit or restore them later. 
 <br>
 You can even share them with your friends and family!
+<br>
+<br>
 
 ## Try it:
 
@@ -52,16 +54,13 @@ It is possible to pass additional arguments:
 <br>
 -r, --remove_list: does not save tabs with domains from this list, in order to prune useless websites.
 
-NOTE: The script assumes there can be maximum two duplicate tabs in a row,
-If more than three tabs repeat, it assumes that it has circled back to the starting tab,
-so it stops for that window.
-
 
 __tabs_focus.py__:
 <br>
 Traverses all the open tabs and prunes the ones from remove_list.
 The goal is to remove unnecessary tabs, without saving, to reduce procrastination.
-
+<br>
+<br>
 
 ### Alias
 
@@ -77,7 +76,8 @@ echo -en "\nalias tabinate='python $PWD/tabs_focus.py'\n" >> ~/.bashrc
 Now you can use one-line aliases: __tabsave__, __tabload__ and __tabinate__
 <br>
 Don't forget to run `source ~/.bashrc`
-
+<br>
+<br>
 
 ### Prerequisites
 
@@ -94,7 +94,8 @@ xvkbd version (3.9-1);
 xclip version (0.12+svn84-4build1);
 <br>
 xdotool version (1:3.20160805.1-3);
-
+<br>
+<br>
 
 ### Resources:
 

@@ -13,10 +13,11 @@ import argparse
 import webbrowser
 
 
-MAX_LOOP = 2
+START_AFTER = 1
 
 
 def keep_active_window(func):
+    """Make sure to return the focus on the window which was active."""
     def wrap(*args, **kwargs):
         active_id = os.popen('xdotool getactivewindow').read()
         func(*args, **kwargs)
@@ -25,6 +26,7 @@ def keep_active_window(func):
 
 
 def get_args():
+    """Extract script arguments."""
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-load', '--load_path',
@@ -67,52 +69,62 @@ def save_tabs(save_path, browser_name, remove_list, group_tabs, **kwargs):
         if save_path is None else save_path
     browser_name = webbrowser.get().__class__.__name__ \
         if browser_name is None else browser_name
+    replace_str = ' - Google Chrome' if browser_name == 'Chrome' else ''
     # Get open window ids
     ids = os.popen('wmctrl -l | grep -oP "(?<=)(0x\w+)(?=.*{})"'.format(
         browser_name)).read()
     open_windows = ids.split('\n')[:-1]
     num_windows = len(open_windows)
-    # Loop through the windows and tabs
     windows_list = []
-    for i, window_id in enumerate(open_windows):
-        print("\n=== Saving window id: {} [{}/{}] ===".format(
-            window_id, i + 1, num_windows))
+    # Loop through the windows
+    for wi, window_id in enumerate(open_windows):
+        print("\n\n=== Saving window id: {} [{}/{}] ===".format(
+            window_id, wi + 1, num_windows))
         # Focus on first tab
         xvkbd_command(window_id, '\C1')
         cnt_d = 0
         tab_id = 0
         tabs_list = []
-        # while True:
-        while True and tab_id < 200 and cnt_d < 100:
+        tabs_dupl = []
+        # Loop through tabs within the window
+        while True and tab_id < 20 and cnt_d < 100:
+            tab_id += 1
             xvkbd_command(window_id, '\Cl')
             xvkbd_command(window_id, '\Cc')
             url = os.popen('xclip -out -selection clipboard').read()
             title = os.popen(
                 "xwininfo -id {} | grep xwininfo".format(window_id)).read()
-            title = title.split('"')[1][:-16]
-            # Assumes there can be maximum MAX_LOOP duplicates in a row
-            if len(tabs_list) and url == tabs_list[cnt_d]['url'] \
-                    and cnt_d >= MAX_LOOP:
-                break
-            elif len(tabs_list) and url == tabs_list[cnt_d]['url']:
-                cnt_d += 1
-                # If two duplicate sequences are next to each other, stop
-                if cnt_d >= len(tabs_list):
-                    break
-                else:
-                    xvkbd_command(window_id, '\C\[Next]')
-                    continue
-            else:
-                cnt_d = 0
-            xvkbd_command(window_id, '\C\[Next]')
-            # Exclude certain webseites from list
+            title = title.split('"')[1].replace(replace_str, '')
+
+            # Exclude websites that are in the remove_list
             if len(remove_list) and sum([rd in url for rd in remove_list]):
+                print("\nSkipping blacklisted website: '{}'".format(title))
+                xvkbd_command(window_id, '\C\[Next]')
                 continue
-            tabs_list.append(
-                {'window_id': window_id, 'title': title, 'url': url})
-            tab_id += 1
-            print("\nTab {}\n> title:  '{}'\n> url:    {}".format(
-                tab_id, title, url))
+            # Try to figure our if back in the beginning or duplicates
+            if len(tabs_list) > START_AFTER and url == tabs_list[cnt_d]['url']:
+                cnt_d += 1                
+                tabs_dupl.append(
+                    {'window_id': wi + 1, 'title': title, 'url': url})
+                # If the list has been repeated
+                if len(tabs_dupl) == len(tabs_list):
+                    break
+            else:
+                if len(tabs_dupl):
+                    tabs_list = tabs_list + tabs_dupl
+                    tabs_dupl = []
+                    cnt_d = 0
+                    # Stay at the same tab to double-check
+                    tab_id -= 1
+                    continue
+                # Add tab to collection
+                tabs_list.append(
+                    {'window_id': wi + 1, 'title': title, 'url': url})
+            if len(tabs_dupl) == 0:
+                print("\nTab {}\n> title:  '{}'\n> url:    {}".format(
+                    tab_id, title, url))
+            # Go to next tab
+            xvkbd_command(window_id, '\C\[Next]')
         # Remove duplicates
         tabs_list = list({tl['url']: tl for tl in tabs_list}.values())
         # Group tabs (sorting by URL)
@@ -136,15 +148,13 @@ def load_tabs(load_path):
         print("\n=== Restoring window [{}/{}] ===".format(w + 1, num_windows))
         num_tabs = len(tabs_list)
         # Loop through tabs
-        for t, tab_dict in enumerate(tabs_list):
+        for ti, tab_dict in enumerate(tabs_list):
             title = tab_dict['title']
             url = tab_dict['url']
             print("\nTab [{}/{}]\n> title:  '{}'\n> url:    {}".format(
-                t + 1, num_tabs, title, url))
-            if t:
-                webbrowser.open_new_tab(url)
-            else:
-                webbrowser.open_new(url)
+                ti + 1, num_tabs, title, url))
+            # Keep the window-tab hierarchy
+            webbrowser.open_new_tab(url) if ti else webbrowser.open_new(url)
     print("\n\n>>> DONE. All tabs restored from file: {}\n".format(load_path))
 
 
