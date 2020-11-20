@@ -7,9 +7,6 @@ Description:
                 procrastination list.
 """
 
-
-import pdb
-
 import os
 import argparse
 import webbrowser
